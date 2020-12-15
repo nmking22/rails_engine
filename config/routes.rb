@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # items
   namespace :api do
     namespace :v1 do
-      resources :items, only: [:index, :show]
+      resources :items
     end
   end
 end
