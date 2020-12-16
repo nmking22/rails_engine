@@ -121,7 +121,7 @@ describe 'Merchants Multi-Find API' do
     expect(output[:data][1][:attributes][:name]).to eq(merchant_2.name)
   end
 
-  it 'returns merchants with name query' do
+  it 'returns merchants with created_at query' do
     merchant = Merchant.create!(
       name: 'Kitten Mittens',
       created_at: '2012-03-27 14:53:59',
@@ -147,7 +147,7 @@ describe 'Merchants Multi-Find API' do
     expect(output[:data][1][:attributes][:name]).to eq(merchant_2.name)
   end
 
-  it 'returns merchants with name query' do
+  it 'returns merchants with updated_at query' do
     merchant = Merchant.create!(
       name: 'Kitten Mittens',
       created_at: '2012-03-27 14:53:59',
