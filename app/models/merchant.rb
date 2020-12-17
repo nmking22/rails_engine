@@ -24,4 +24,12 @@ class Merchant < ApplicationRecord
     .order("total_quantity DESC")
     .limit(quantity)
   end
+
+  def revenue
+    invoices.select("SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
+    .joins(:invoice_items, :transactions)
+    .where(status: "shipped")
+    .where("transactions.result = ?", "success")
+    .group(:merchant_id)[0].revenue
+  end
 end
