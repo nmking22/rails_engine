@@ -1,5 +1,5 @@
 class Api::V1::Items::SearchController < ApplicationController
-  def index
+  def find_all
     search_params.each do |key, value|
       if key == 'unit_price' || key == 'merchant_id'
         @items = Item.where("#{key} = #{value.to_f}")
@@ -11,7 +11,7 @@ class Api::V1::Items::SearchController < ApplicationController
   end
 
 
-  def show
+  def find
     search_params.each do |key, value|
       if key == 'unit_price' || key == 'merchant_id'
         @item = Item.where("#{key} = #{value.to_f}")[0]
