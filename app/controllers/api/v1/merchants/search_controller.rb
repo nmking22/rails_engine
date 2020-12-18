@@ -1,16 +1,43 @@
 class Api::V1::Merchants::SearchController < ApplicationController
-  def index
+  def find_all
     search_params.each do |key, value|
       @merchants = Merchant.where("lower(#{key}) like ?", "%#{value.downcase}%")
     end
     render json: MerchantSerializer.new(@merchants)
   end
 
-  def show
+  def find
     search_params.each do |key, value|
       @merchant = Merchant.where("lower(#{key}) like ?", "%#{value.downcase}%")[0]
     end
     render json: MerchantSerializer.new(@merchant)
+  end
+
+  def most_revenue
+    quantity = params[:quantity].to_i
+    merchants = Merchant.most_revenue(quantity)
+    render json: MerchantSerializer.new(merchants)
+  end
+
+  def most_items
+    quantity = params[:quantity].to_i
+    merchants = Merchant.most_items(quantity)
+    render json: MerchantSerializer.new(merchants)
+  end
+
+  def revenue
+    merchant = Merchant.find(params[:id])
+    # binding.pry
+    render json: RevenueSerializer.new(merchant.revenue)
+  end
+
+  def revenue_across_dates
+    start_date = params[:start]
+    end_date = params[:end]
+    # binding.pry
+    revenue = Merchant.revenue_across_dates(start_date, end_date)
+
+    render json: RevenueSerializer.new(revenue)
   end
 
   private
