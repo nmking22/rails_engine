@@ -206,7 +206,8 @@ describe 'Business Intelligence API' do
     @invoice_1 = Invoice.create(
       customer: @customer,
       merchant: @merchant_1,
-      status: 'shipped'
+      status: 'shipped',
+      created_at: '2012-03-20 02:58:15'
     )
     @invoice_2 = Invoice.create(
       customer: @customer,
@@ -301,5 +302,68 @@ describe 'Business Intelligence API' do
     expect(output[:data][1][:type]).to eq('merchant')
     expect(output[:data][0][:attributes][:name]).to eq(@merchant_1.name)
     expect(output[:data][1][:attributes][:name]).to eq(@merchant_2.name)
+  end
+
+  it 'returns total revenue for a merchant' do
+    invoice = Invoice.create(
+      customer: @customer,
+      merchant: @merchant_1,
+      status: 'shipped'
+    )
+    invoice_item = InvoiceItem.create(
+      item: @item_1,
+      invoice: invoice,
+      quantity: 10,
+      unit_price: 5.00
+    )
+    transaction = Transaction.create(
+      invoice: invoice,
+      credit_card_number: 12345,
+      credit_card_expiration_date: 04/23,
+      result: 'success'
+    )
+
+    get "/api/v1/merchants/#{@merchant_1.id}/revenue"
+
+    expect(response).to be_successful
+    output = JSON.parse(response.body, symbolize_names: true)
+
+    expect(output).to be_a(Hash)
+    expect(output.count).to eq(1)
+    expect(output[:data][:id]).to eq(nil)
+    expect(output[:data][:attributes]).to be_a(Hash)
+    expect(output[:data][:attributes][:revenue]).to eq(2550)
+  end
+
+  it 'returns revenue across date range' do
+    invoice = Invoice.create(
+      customer: @customer,
+      merchant: @merchant_1,
+      status: 'shipped',
+      created_at: '2012-03-23 02:58:15'
+    )
+    invoice_item = InvoiceItem.create(
+      item: @item_1,
+      invoice: invoice,
+      quantity: 10,
+      unit_price: 5.00
+    )
+    transaction = Transaction.create(
+      invoice: invoice,
+      credit_card_number: 12345,
+      credit_card_expiration_date: 04/23,
+      result: 'success'
+    )
+
+    get '/api/v1/revenue?start=2012-03-22&end=2012-03-24'
+
+    expect(response).to be_successful
+    output = JSON.parse(response.body, symbolize_names: true)
+
+    expect(output).to be_a(Hash)
+    expect(output[:data][:id]).to eq(nil)
+    expect(output[:data][:attributes]).to be_a(Hash)
+    expect(output[:data][:attributes][:revenue]).to eq(50)
+
   end
 end
