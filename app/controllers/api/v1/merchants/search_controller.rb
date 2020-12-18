@@ -25,6 +25,21 @@ class Api::V1::Merchants::SearchController < ApplicationController
     render json: MerchantSerializer.new(merchants)
   end
 
+  def revenue
+    merchant = Merchant.find(params[:id])
+    # binding.pry
+    render json: RevenueSerializer.new(merchant.revenue)
+  end
+
+  def revenue_across_dates
+    start_date = params[:start]
+    end_date = params[:end]
+    # binding.pry
+    revenue = Merchant.revenue_across_dates(start_date, end_date)
+
+    render json: RevenueSerializer.new(revenue)
+  end
+
   private
 
     def search_params
