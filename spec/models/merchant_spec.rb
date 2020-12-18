@@ -41,12 +41,14 @@ describe Merchant, type: :model do
       @invoice_1 = Invoice.create(
         customer: @customer,
         merchant: @merchant_1,
-        status: 'shipped'
+        status: 'shipped',
+        created_at: '2012-03-27 14:53:59'
       )
       @invoice_2 = Invoice.create(
         customer: @customer,
         merchant: @merchant_2,
-        status: 'shipped'
+        status: 'shipped',
+        created_at: '2012-04-27 14:53:59'
       )
       @invoice_3 = Invoice.create(
         customer: @customer,
@@ -116,6 +118,10 @@ describe Merchant, type: :model do
     it '.most_items' do
       expect(Merchant.most_revenue(3)).to eq([@merchant_1, @merchant_2])
       expect(Merchant.most_revenue).to eq([@merchant_1])
+    end
+
+    it '.revenue_across_dates' do
+      expect(Merchant.revenue_across_dates('2012-03-01', '2012-04-01').revenue).to eq(2500)
     end
   end
 
@@ -207,7 +213,7 @@ describe Merchant, type: :model do
         result: 'failed'
       )
 
-      expect(merchant.revenue).to eq(3000.00)
+      expect(merchant.revenue.revenue).to eq(3000.00)
     end
   end
 end
