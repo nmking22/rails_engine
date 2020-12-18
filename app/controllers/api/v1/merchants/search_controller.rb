@@ -33,7 +33,7 @@ class Api::V1::Merchants::SearchController < ApplicationController
   def revenue_across_dates
     start_date = params[:start]
     end_date = params[:end]
-    revenue = Merchant.revenue_across_dates(start_date, end_date)
+    revenue = Invoice.revenue_across_dates(start_date, end_date)
 
     render json: RevenueSerializer.new(revenue)
   end
