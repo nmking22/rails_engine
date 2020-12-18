@@ -119,10 +119,6 @@ describe Merchant, type: :model do
       expect(Merchant.most_revenue(3)).to eq([@merchant_1, @merchant_2])
       expect(Merchant.most_revenue).to eq([@merchant_1])
     end
-
-    it '.revenue_across_dates' do
-      expect(Merchant.revenue_across_dates('2012-03-01', '2012-04-01').revenue).to eq(2500)
-    end
   end
 
   describe 'instance methods' do
