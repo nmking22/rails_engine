@@ -14,12 +14,6 @@ describe "Merchants API" do
     merchants[:data].each do |merchant|
       expect(merchant[:attributes]).to have_key(:name)
       expect(merchant[:attributes][:name]).to be_a(String)
-
-      expect(merchant[:attributes]).to have_key(:created_at)
-      expect(merchant[:attributes][:created_at]).to be_a(String)
-
-      expect(merchant[:attributes]).to have_key(:updated_at)
-      expect(merchant[:attributes][:updated_at]).to be_a(String)
     end
   end
 
@@ -34,19 +28,11 @@ describe "Merchants API" do
 
     expect(merchant[:data][:attributes]).to have_key(:name)
     expect(merchant[:data][:attributes][:name]).to be_a(String)
-
-    expect(merchant[:data][:attributes]).to have_key(:created_at)
-    expect(merchant[:data][:attributes][:created_at]).to be_a(String)
-
-    expect(merchant[:data][:attributes]).to have_key(:updated_at)
-    expect(merchant[:data][:attributes][:updated_at]).to be_a(String)
   end
 
   it "can create a new merchant" do
     merchant_params = ({
                     name: "Bob's Burgers",
-                    created_at: '2012-03-27 14:53:59.000000',
-                    updated_at: '2012-03-27 14:53:59.000000',
                   })
     headers = {"CONTENT_TYPE" => "application/json"}
 
@@ -56,8 +42,6 @@ describe "Merchants API" do
 
     expect(response).to be_successful
     expect(created_merchant.name).to eq(merchant_params[:name])
-    expect(created_merchant.created_at).to eq(merchant_params[:created_at])
-    expect(created_merchant.updated_at).to eq(merchant_params[:updated_at])
   end
 
   it "can update an existing merchant" do
